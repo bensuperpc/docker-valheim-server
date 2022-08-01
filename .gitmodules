@@ -1,0 +1,3 @@
+[submodule "submodule/valheim-server-docker"]
+	path = submodule/valheim-server-docker
+	url = git@github.com:lloesche/valheim-server-docker.git

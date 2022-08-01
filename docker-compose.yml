@@ -1,0 +1,33 @@
+version: "3"
+
+services: 
+  valheim-server: 
+    image: ghcr.io/lloesche/valheim-server
+    cap_add:
+      - sys_nice
+    profiles:
+        - valheim-server
+    volumes: 
+      - config:/config
+      - data:/opt/valheim
+    ports: 
+      - "2456-2457:2456-2457/udp"
+      - "9001:9001/tcp"
+    env_file:
+      - valheim.env
+    restart: on-failure:3
+  backup:
+      image: offen/docker-volume-backup:latest
+      profiles:
+          - backup
+      depends_on:
+          - valheim-server
+      env_file:
+      - backup.env
+      volumes:
+          - data:/backup/my-app-backup:ro
+          - archive:/archive:rw
+volumes:
+    config: {}
+    data: {}
+    archive: {} # Backup every 2 hours
